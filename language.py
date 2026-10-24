@@ -1,5 +1,5 @@
-# language.py: turns everyday messages into actions StudyBot understands.
-# Kept separate from bot.py so it can be tested without Discord.
+# language.py is the little translator that helps StudyBot understand normal human sentences.
+# We keep it separate from bot.py so it is easy to test without any Discord fuss.
 
 import re
 from datetime import date, timedelta
@@ -7,7 +7,7 @@ from datetime import date, timedelta
 WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 
-# Short names people might use for each quiz topic
+# These are the short, friendly names people often use when they mean a quiz topic.
 TOPIC_ALIASES = {
     "bio": "biology",
     "chem": "chemistry",
@@ -18,8 +18,8 @@ TOPIC_ALIASES = {
 
 
 def parse_due_date(text, today=None):
-    """Turn 'tomorrow', 'friday', 'in 3 days', '5 nov', '05/11' or '2026-11-05'
-    into a date. Returns None if it can't understand it."""
+    """Turn friendly phrases like 'tomorrow', 'friday', 'in 3 days', '5 nov', '05/11', and '2026-11-05'
+    into a real date. If it gets confused, it kindly gives us None."""
     today = today or date.today()
     text = text.lower().strip().rstrip(".!?")
     text = re.sub(r"^(on|by|this|next)\s+", "", text)
@@ -29,12 +29,12 @@ def parse_due_date(text, today=None):
     if text == "tomorrow":
         return today + timedelta(days=1)
 
-    # "in 3 days"
+    # "in 3 days" is a very common little reminder phrase.
     match = re.fullmatch(r"in (\d+) days?", text)
     if match:
         return today + timedelta(days=int(match.group(1)))
 
-    # A weekday, e.g. "friday" or "fri": the next one that hasn't happened yet
+    # A weekday like "friday" or "fri" means "the next time that day shows up."
     for i, day in enumerate(WEEKDAYS):
         if text in (day, day[:3]):
             days_ahead = (i - today.weekday()) % 7 or 7
@@ -45,13 +45,13 @@ def parse_due_date(text, today=None):
         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
             return date.fromisoformat(text)
 
-        # "05/11" or "05/11/2026" (UK order: day/month)
+        # "05/11" or "05/11/2026" (the UK style, day first, and then month)
         match = re.fullmatch(r"(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?", text)
         if match:
             day, month, year = match.groups()
             return _make_date(int(day), int(month), year, today)
 
-        # "5 nov", "5th November", "nov 5"
+        # "5 nov", "5th November", or "nov 5"
         match = (re.fullmatch(r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)", text)
                  or re.fullmatch(r"([a-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?", text))
         if match:
@@ -59,14 +59,14 @@ def parse_due_date(text, today=None):
             day, month_word = (first, second) if first.isdigit() else (second, first)
             if month_word[:3] in MONTHS:
                 return _make_date(int(day), MONTHS.index(month_word[:3]) + 1, None, today)
-    except ValueError:  # e.g. 31 February
+    except ValueError:  # like when someone asks for 31 February, which is a bit of a nonsense date
         return None
 
     return None
 
 
 def _make_date(day, month, year, today):
-    """Build a date. With no year given, use the next time that date comes round."""
+    """Build a date and, if no year was given, make sure it lands on the next correct time it appears."""
     if year:
         year = int(year)
         if year < 100:
@@ -79,7 +79,7 @@ def _make_date(day, month, year, today):
 
 
 def find_topic(text, topics):
-    """Find a quiz topic mentioned in the text, e.g. 'chem' -> 'chemistry'."""
+    """Look for a quiz topic in a sentence, like turning 'chem' into 'chemistry' for us."""
     for word in re.findall(r"[a-z]+", text.lower()):
         if word in topics:
             return word
@@ -89,11 +89,11 @@ def find_topic(text, topics):
 
 
 def understand(text, topics):
-    """Work out what someone wants from a normal sentence.
-    Returns (intent, details), e.g. ("quiz", {"topic": "biology"})."""
+    """Figure out what somebody wants from a normal sentence.
+    It returns something like ("quiz", {"topic": "biology"}) so the bot knows what to do next."""
     lower = text.lower().strip()
 
-    # Leaderboard: "who's winning?", "show the scores"
+    # Leaderboard time: "who's winning?", "show the scores"
     if re.search(r"\b(leaderboard|scores?|points|winning|top)\b", lower):
         return "leaderboard", {}
 
@@ -121,7 +121,7 @@ def understand(text, topics):
             return "homework_bad_date", {"when": when}
         return "homework_add", {"subject": subject, "task": task, "due": due}
 
-    # Quiz: "quiz me on chem", "ask me a biology question"
+    # Quiz time: "quiz me on chem", "ask me a biology question"
     if re.search(r"\b(quiz|question|test me|ask me|revise)\b", lower):
         return "quiz", {"topic": find_topic(lower, topics)}
 

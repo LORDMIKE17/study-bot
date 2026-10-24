@@ -1,7 +1,7 @@
-# StudyBot: a Discord bot for quizzes, homework tracking and reminders.
-# Talk to it by @mentioning it ("@StudyBot quiz me on chemistry"),
-# or use the slash commands (/quiz, /homework, /leaderboard).
-# Run with: python3 bot.py
+# StudyBot is our cheerful little study helper for Discord.
+# You can wake it up by mentioning it, like "@StudyBot quiz me on chemistry",
+# or by using friendly commands such as /quiz, /homework, and /leaderboard.
+# Run it with: python3 bot.py
 
 import os
 import re
@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 
 from language import understand, parse_due_date
 
-# ---------- Setup ----------
+# ---------- A tiny bit of setup so the bot can wake up properly ----------
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = discord.Object(id=int(os.getenv("GUILD_ID")))
@@ -36,7 +36,7 @@ HELP_TEXT = (
     "- **who's winning?**"
 )
 
-# ---------- Database ----------
+# ---------- Our little memory box for homework and scores ----------
 db = sqlite3.connect("study.db")
 db.execute("""CREATE TABLE IF NOT EXISTS homework (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -99,7 +99,7 @@ def leaderboard_text():
     return "\n".join(lines)
 
 
-# ---------- Quiz ----------
+# ---------- The quiz deck we keep in the closet ----------
 with open("questions.json", encoding="utf-8") as f:
     QUESTIONS = json.load(f)
 
@@ -135,21 +135,21 @@ class QuizView(discord.ui.View):
 
 
 def pick_question(topic):
-    """Pick a random question. With no topic, pick a random topic too."""
+    """Pick a random question for the chosen topic, or choose a random topic if none was given."""
     topic = topic or random.choice(list(QUESTIONS))
     return topic, random.choice(QUESTIONS[topic])
 
 
-# ---------- Talking normally (@mentions and DMs) ----------
+# ---------- Chatting like a real study buddy in mentions and DMs ----------
 @client.event
 async def on_message(message):
     if message.author.bot:
         return
     is_dm = isinstance(message.channel, discord.DMChannel)
     if client.user not in message.mentions and not is_dm:
-        return  # only answer when someone @mentions the bot, or in a DM
+        return  # only answer when someone mentions the bot, or when the chat is a DM
 
-    text = re.sub(r"<@!?\d+>", "", message.content).strip()  # remove the @StudyBot part
+    text = re.sub(r"<@!?\d+>", "", message.content).strip()  # take the @StudyBot part out of the message
     intent, details = understand(text, list(QUESTIONS))
 
     if intent == "quiz":
@@ -182,7 +182,7 @@ async def on_message(message):
     await message.reply(reply, allowed_mentions=NO_PINGS)
 
 
-# ---------- Slash commands (still work too) ----------
+# ---------- Slash commands, because sometimes people like the neat button way ----------
 @tree.command(name="hello", description="Say hi to the bot")
 async def hello(interaction: discord.Interaction):
     await interaction.response.send_message("Hi! Ready to revise? 📚\n\n" + HELP_TEXT)
@@ -237,10 +237,10 @@ async def leaderboard(interaction: discord.Interaction):
     await interaction.response.send_message(leaderboard_text(), allowed_mentions=NO_PINGS)
 
 
-# ---------- Reminders ----------
+# ---------- Little reminder patrol, because even revision superheroes forget things ----------
 @tasks.loop(hours=1)
 async def reminder_loop():
-    if datetime.now().hour < 17:  # only remind from 5pm onwards
+    if datetime.now().hour < 17:  # only remind when the evening is getting serious
         return
     tomorrow = (date.today() + timedelta(days=1)).isoformat()
     rows = db.execute(
@@ -255,7 +255,7 @@ async def reminder_loop():
     db.commit()
 
 
-# ---------- Start up ----------
+# ---------- Time to boot up the bot and let it start helping ----------
 @client.event
 async def on_ready():
     tree.copy_global_to(guild=GUILD)
