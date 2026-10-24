@@ -1,0 +1,42 @@
+{
+  "biology": [
+    {"q": "What is the powerhouse of the cell?", "options": ["Nucleus", "Mitochondria", "Ribosome", "Cell wall"], "answer": 1},
+    {"q": "Which gas do plants take in for photosynthesis?", "options": ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], "answer": 2},
+    {"q": "Where in the cell are proteins made?", "options": ["Ribosomes", "Vacuole", "Cell membrane", "Mitochondria"], "answer": 0},
+    {"q": "Which blood cells fight infection?", "options": ["Red blood cells", "Platelets", "White blood cells", "Plasma"], "answer": 2},
+    {"q": "Which enzyme breaks down starch?", "options": ["Lipase", "Protease", "Amylase", "Catalase"], "answer": 2},
+    {"q": "What type of cell division makes gametes?", "options": ["Mitosis", "Meiosis", "Binary fission", "Osmosis"], "answer": 1},
+    {"q": "Which organ produces insulin?", "options": ["Liver", "Kidney", "Pancreas", "Stomach"], "answer": 2},
+    {"q": "What is the movement of water across a partially permeable membrane called?", "options": ["Diffusion", "Active transport", "Osmosis", "Respiration"], "answer": 2}
+  ],
+  "chemistry": [
+    {"q": "What is the chemical symbol for sodium?", "options": ["S", "So", "Na", "Sd"], "answer": 2},
+    {"q": "What is the pH of a neutral solution?", "options": ["0", "7", "10", "14"], "answer": 1},
+    {"q": "What charge does a proton have?", "options": ["Positive", "Negative", "Neutral", "It varies"], "answer": 0},
+    {"q": "Which group of the periodic table contains the noble gases?", "options": ["Group 1", "Group 2", "Group 7", "Group 0"], "answer": 3},
+    {"q": "What gas is produced when a metal reacts with an acid?", "options": ["Oxygen", "Hydrogen", "Carbon dioxide", "Chlorine"], "answer": 1},
+    {"q": "What type of bond forms between a metal and a non-metal?", "options": ["Covalent", "Ionic", "Metallic", "Hydrogen"], "answer": 1},
+    {"q": "What is the relative formula mass of H2O? (H = 1, O = 16)", "options": ["17", "18", "32", "34"], "answer": 1},
+    {"q": "Which gas turns limewater cloudy?", "options": ["Oxygen", "Hydrogen", "Carbon dioxide", "Nitrogen"], "answer": 2}
+  ],
+  "physics": [
+    {"q": "What is the unit of force?", "options": ["Joule", "Watt", "Newton", "Pascal"], "answer": 2},
+    {"q": "Which equation links speed, distance and time?", "options": ["speed = distance x time", "speed = distance / time", "speed = time / distance", "speed = distance + time"], "answer": 1},
+    {"q": "What is the unit of electrical resistance?", "options": ["Ampere", "Volt", "Ohm", "Coulomb"], "answer": 2},
+    {"q": "Which type of electromagnetic wave has the longest wavelength?", "options": ["Gamma rays", "Visible light", "X-rays", "Radio waves"], "answer": 3},
+    {"q": "What is the acceleration due to gravity on Earth, roughly?", "options": ["1 m/s2", "9.8 m/s2", "98 m/s2", "0.98 m/s2"], "answer": 1},
+    {"q": "Which equation gives power?", "options": ["P = E / t", "P = E x t", "P = t / E", "P = m x g"], "answer": 0},
+    {"q": "Which particle has no charge?", "options": ["Proton", "Electron", "Neutron", "Ion"], "answer": 2},
+    {"q": "What is the formula for kinetic energy?", "options": ["mgh", "1/2 mv2", "mv", "Fd"], "answer": 1}
+  ],
+  "maths": [
+    {"q": "What is 15% of 80?", "options": ["8", "12", "15", "20"], "answer": 1},
+    {"q": "Solve 3x + 5 = 20", "options": ["x = 3", "x = 5", "x = 15", "x = 25/3"], "answer": 1},
+    {"q": "What is the sum of the interior angles of a triangle?", "options": ["90 degrees", "180 degrees", "270 degrees", "360 degrees"], "answer": 1},
+    {"q": "What is 2 to the power of 5?", "options": ["10", "25", "32", "64"], "answer": 2},
+    {"q": "What is the gradient of y = 4x - 7?", "options": ["-7", "4", "7", "-4"], "answer": 1},
+    {"q": "Which of these is a prime number?", "options": ["21", "27", "29", "33"], "answer": 2},
+    {"q": "What is the area of a circle with radius 3? (Leave in terms of pi)", "options": ["3 pi", "6 pi", "9 pi", "12 pi"], "answer": 2},
+    {"q": "Expand (x + 2)(x + 3)", "options": ["x2 + 5x + 6", "x2 + 6x + 5", "x2 + 5x + 5", "2x + 5"], "answer": 0}
+  ]
+}
